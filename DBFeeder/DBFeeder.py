@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
 
     #m20Connector = M20PSQLConnector('data_reply_db', 'dario', 'localhost', 'password')
-    m20Connector = M20PSQLConnector('postgres', 'cloudera-scm', 'localhost', '7432', 'mroOvCJqjS')
+    m20Connector = M20PSQLConnector('postgres', 'cloudera-scm', 'localhost', '7432', 'y6jOvCiNAz')
     m20Connector.connect()
 
     if (dropAll):

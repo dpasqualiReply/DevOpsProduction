@@ -1,4 +1,5 @@
 import _root_.kafka.serializer._
+import org.apache.kudu.spark.kudu.KuduContext
 import org.apache.spark._
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.streaming._
@@ -9,6 +10,21 @@ object DirectStreamer{
 
   val SERVER_IP : String = "devops-cloudera-vm.c.devops-data-reply.internal"
   val CLOUDERA = s"${SERVER_IP}"
+
+  val KUDU_MASTER = "cloudera-vm.c.endless-upgrade-187216.internal:7051"
+  val KUDU_TABLE_BASE = "impala::datamart."
+
+
+/*
+
+  // TODO In the next update
+  // For now will be do by reccomender.
+
+  val CLOUDERA_KUDU_TABLE_USER_RATINGS = "impala::datamart.user_ratings"
+  val CLOUDERA_KUDU_TABLE_MOVIE_RATED = "impala::datamart.movie_rated"
+*/
+
+
 
   var toHive = true
   var onlyDebug = false;
@@ -33,11 +49,11 @@ object DirectStreamer{
     if(args.size < 2){
 
       println("""  USAGE: DirectStreamer topicName smallest|largest [ [-h] | [--debug | --hive] ]\n
-                        normally it push kakfa streams to hdfs folders and hive table\n
-                        --test  just print the stream\n
-                        --hive  store only to hive datalake\n
-                        \n
-                        -h      show this usage""")
+      normally it push kakfa streams to hdfs folders and hive table\n
+      --test  just print the stream\n
+      --hive  store only to hive datalake\n
+      \n
+      -h      show this usage""")
       return
     }
 
@@ -46,11 +62,11 @@ object DirectStreamer{
       if(args(2) == "-h")
       {
         println("""  USAGE: DirectStreamer topicName [ [-h] | [--debug | --hive] ]\n
-                        normally it push kakfa streams to hdfs folders and hive table\n
-                        --test  just print the stream\n
-                        --hive  store only to hive datalake\n
-                        \n
-                        -h      show this usage""")
+        normally it push kakfa streams to hdfs folders and hive table\n
+        --test  just print the stream\n
+        --hive  store only to hive datalake\n
+        \n
+        -h      show this usage""")
         return
       }
 
@@ -80,6 +96,8 @@ object DirectStreamer{
 
     var spark : SparkSession = null
 
+    val kuduContext = new KuduContext(KUDU_MASTER, ssc.sparkContext)
+
     if(toHive)
       spark = SparkSession.builder().appName("Direct Streamer")
       .enableHiveSupport()
@@ -105,7 +123,8 @@ object DirectStreamer{
       args(0)
     )
 
-    val kafkaParams = Map[String, String]("bootstrap.servers" -> "localhost:9092",
+    val kafkaParams = Map[String, String](
+      "bootstrap.servers" -> "localhost:9092",
       "auto.offset.reset" -> args(1),
       "group.id" -> "group1")
 
@@ -127,64 +146,77 @@ object DirectStreamer{
           val stringRDD = rdd.map(entry => entry._2)
           val jsonDF = spark.sqlContext.jsonRDD(stringRDD)
 
-          var cols : Seq[String] = null
+          var cols : Seq[String] = Seq()
+          var colsKudu : Seq[String] = Seq()
           var toSave : DataFrame = null
-
-          cols = Seq("")
+          var toSaveKudu : DataFrame = null
 
           tableName match {
 
             case "tags" => {
 
               cols = Seq("id", "userid", "movieid", "tag", "timestamp")
+              colsKudu = Seq("userid", "movieid", "tag", "time")
               toSave = jsonDF
                 .withColumn("id", jsonDF("payload.id"))
                 .withColumn("userid", jsonDF("payload.userid"))
                 .withColumn("movieid", jsonDF("payload.movieid"))
                 .withColumn("tag", jsonDF("payload.tag"))
                 .withColumn("timestamp", jsonDF("payload.timestamp"))
-                .select(cols.head, cols.tail: _*)
+
+	            toSaveKudu = toSave.toDF("payload", "schema", "id", "userid", "movieid", "tag", "time")
+                .select(colsKudu.head, colsKudu.tail: _*)
             }
 
             case "ratings" => {
 
               cols = Seq("id", "userid", "movieid", "rating", "timestamp")
+              colsKudu = Seq("userid", "movieid", "rating", "time")
+
               toSave = jsonDF
                 .withColumn("id", jsonDF("payload.id"))
                 .withColumn("userid", jsonDF("payload.userid"))
                 .withColumn("movieid", jsonDF("payload.movieid"))
                 .withColumn("rating", jsonDF("payload.rating"))
                 .withColumn("timestamp", jsonDF("payload.timestamp"))
-                .select(cols.head, cols.tail: _*)
+
+	            toSaveKudu = toSave.toDF("payload", "schema", "id", "userid", "movieid", "rating", "time")
+                .select(colsKudu.head, colsKudu.tail: _*)
             }
 
             case "genomescore" => {
 
               cols = Seq("id", "movieid", "tagid", "relevance")
+              colsKudu = Seq("movieid", "tagid", "relevance")
+
               toSave = jsonDF
                 .withColumn("id", jsonDF("payload.id"))
                 .withColumn("movieid", jsonDF("payload.movieid"))
                 .withColumn("tagid", jsonDF("payload.tagid"))
                 .withColumn("relevance", jsonDF("payload.relevance"))
-                .select(cols.head, cols.tail: _*)
             }
 
           }
 
+          toSave = toSave.select(cols.head, cols.tail: _*)
+
           toSave.printSchema()
+          toSaveKudu.printSchema()
 
           if(onlyDebug)
           {
             toSave.show()
+	          toSaveKudu.show()
           }
           else
           {
             if(toHive)
             {
-              println("SAVE TO HIVE-------------------------------------")
+              println("\n[ INFO ] ====== Save To Hive Data Lake ======\n")
               toSave.write.mode("append").saveAsTable(s"datalake.${tableName}")
-	      //toSave.createTempView("rawdata")
-              //spark.sql(s"insert into table datalake.${tableName} select * from rawdata")
+
+              println("\n[ INFO ] ====== Save To Kudu Data Mart ======\n")
+              kuduContext.insertRows(toSaveKudu, KUDU_TABLE_BASE+tableName)
             }
           }
         }
