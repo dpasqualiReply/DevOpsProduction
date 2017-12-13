@@ -14,25 +14,20 @@ pipeline {
         
       }
       steps {
-        echo "Load Config Variables from environment (put them in src/test/conf)"
-        echo "Install required stuff in the docker container"
-        echo "TODO make a dockerfile and enable Configuration Management"
-
-        sudo yum update -y
-        sudo yum install wget -y
-
-        //Install Java
-
-        sudo yum install java-1.8.0-openjdk -y
-
-        //Install SBT
-
-        sudo wget https://dl.bintray.com/sbt/rpm/sbt-1.0.0.rpm
-        sudo yum localinstall sbt-1.0.0.rpm -y
-
-        echo "Test the setup"
-        java --version
-        sbt about
+        echo 'Load Config Variables from environment (put them in src/test/conf)'
+        sh '''echo "Install required stuff in the docker container"
+echo "TODO make a dockerfile and enable Configuration Management"
+sudo yum update -y
+sudo yum install wget -y
+## Install Java
+sudo yum install java-1.8.0-openjdk -y
+## Install SBT
+sudo wget https://dl.bintray.com/sbt/rpm/sbt-1.0.0.rpm
+sudo yum localinstall sbt-1.0.0.rpm -y
+'''
+        sh '''echo "Test the setup"
+java --version
+sbt about'''
       }
     }
     stage('Test') {
@@ -45,19 +40,21 @@ pipeline {
             
           }
           steps {
-            //cd PipelineTester
-            echo "Test starting..."
-            sbt about
-            //sbt clean coverage test coverageReport
+            sh '''#cd PipelineTester
+echo "Test starting..."
+sbt about
+#sbt clean coverage test coverageReport
+'''
           }
         }
         stage('Test BatchETL') {
           steps {
-            cd BatchETL
-            ls -la
-            echo "Test starting..."
-            echo "TODO"
-            //sbt clean coverage test coverageReport
+            sh '''cd BatchETL
+ls -la
+echo "Test starting..."
+echo "TODO"
+#sbt clean coverage test coverageReport
+'''
           }
         }
         stage('Test RealTimeETL') {
@@ -68,11 +65,12 @@ pipeline {
             
           }
           steps {
-            cd RealTimeETL
-            ls -la
-            echo "Test starting..."
-            echo "TODO"
-            //sbt clean coverage test coverageReport
+            sh '''cd RealTimeETL
+ls -la
+echo "Test starting..."
+echo "TODO"
+#sbt clean coverage test coverageReport
+'''
           }
         }
         stage('Test MRSpark2') {
@@ -83,11 +81,12 @@ pipeline {
             
           }
           steps {
-            cd MRSpark2
-            ls -la
-            echo "Test starting..."
-            echo "TODO"
-            //sbt clean coverage test coverageReport
+            sh '''cd MRSpark2
+ls -la
+echo "Test starting..."
+echo "TODO"
+#sbt clean coverage test coverageReport
+'''
           }
         }
         stage('Test RealTimeMovieRec') {
@@ -98,12 +97,12 @@ pipeline {
             
           }
           steps {
-            scd RealTimeMovieRec
-            ls -la
-            echo "Test starting..."
-            echo "TODO"
-            //sbt clean coverage test coverageReport
-
+            sh '''cd RealTimeMovieRec
+ls -la
+echo "Test starting..."
+echo "TODO"
+#sbt clean coverage test coverageReport
+'''
           }
         }
       }
@@ -118,8 +117,8 @@ pipeline {
             
           }
           steps {
-            echo "Deploy some build code to production"
-            //sudo cp build.jar /opt/
+            sh '''echo "Deploy some build code to production"
+#sudo cp build.jar /opt/'''
           }
         }
         stage('Deploy BatchETL') {
@@ -130,7 +129,7 @@ pipeline {
             
           }
           steps {
-            echo "Deploy Batch ETL spark job to Cloudera VM"
+            sh 'echo "Deploy Batch ETL spark job to Cloudera VM"'
           }
         }
         stage('Deploy RealTimeETL') {
@@ -141,7 +140,7 @@ pipeline {
             
           }
           steps {
-            echo "Deploy Real Time ETL to devops-worker VM"
+            sh 'echo "Deploy Real Time ETL to devops-worker VM"'
           }
         }
         stage('Deploy MRSpark2') {
@@ -152,7 +151,7 @@ pipeline {
             
           }
           steps {
-            echo "Deploy Movie Recommender to devops-worker VM"
+            sh 'echo "Deploy Movie Recommender to devops-worker VM"'
           }
         }
         stage('Deploy RealTimeMovieRec') {
@@ -163,7 +162,7 @@ pipeline {
             
           }
           steps {
-            echo "Deploy recommender web app and put it online"
+            sh 'echo "Deploy recommender web app and put it online"'
           }
         }
       }
