@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'centos:7 cc'
+      image 'centos:7'
     }
     
   }
