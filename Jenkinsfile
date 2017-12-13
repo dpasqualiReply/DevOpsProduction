@@ -21,11 +21,11 @@ pipeline {
         sudo yum update -y
         sudo yum install wget -y
 
-        ## Install Java
+        //Install Java
 
         sudo yum install java-1.8.0-openjdk -y
 
-        ## Install SBT
+        //Install SBT
 
         sudo wget https://dl.bintray.com/sbt/rpm/sbt-1.0.0.rpm
         sudo yum localinstall sbt-1.0.0.rpm -y
@@ -45,10 +45,10 @@ pipeline {
             
           }
           steps {
-            #cd PipelineTester
+            //cd PipelineTester
             echo "Test starting..."
             sbt about
-            #sbt clean coverage test coverageReport
+            //sbt clean coverage test coverageReport
           }
         }
         stage('Test BatchETL') {
@@ -57,7 +57,7 @@ pipeline {
             ls -la
             echo "Test starting..."
             echo "TODO"
-            #sbt clean coverage test coverageReport
+            //sbt clean coverage test coverageReport
           }
         }
         stage('Test RealTimeETL') {
@@ -72,7 +72,7 @@ pipeline {
             ls -la
             echo "Test starting..."
             echo "TODO"
-            #sbt clean coverage test coverageReport
+            //sbt clean coverage test coverageReport
           }
         }
         stage('Test MRSpark2') {
@@ -87,7 +87,7 @@ pipeline {
             ls -la
             echo "Test starting..."
             echo "TODO"
-            #sbt clean coverage test coverageReport
+            //sbt clean coverage test coverageReport
           }
         }
         stage('Test RealTimeMovieRec') {
@@ -102,7 +102,7 @@ pipeline {
             ls -la
             echo "Test starting..."
             echo "TODO"
-            #sbt clean coverage test coverageReport
+            //sbt clean coverage test coverageReport
 
           }
         }
@@ -119,7 +119,7 @@ pipeline {
           }
           steps {
             echo "Deploy some build code to production"
-            #sudo cp build.jar /opt/
+            //sudo cp build.jar /opt/
           }
         }
         stage('Deploy BatchETL') {
