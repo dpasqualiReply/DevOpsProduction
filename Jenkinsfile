@@ -9,7 +9,7 @@ pipeline {
     stage('Setup') {
       steps {
         echo 'setup'
-        sh 'yum update -y'
+        sh 'sudo yum update -y'
       }
     }
     stage('Test') {
