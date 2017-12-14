@@ -1,5 +1,10 @@
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'centos:7'
+    }
+    
+  }
   stages {
     stage('Setup') {
       steps {
@@ -7,12 +12,7 @@ pipeline {
       }
     }
     stage('Test') {
-      agent {
-        docker {
-          image 'centos:7'
-        }
-        
-      }
+      agent any
       steps {
         echo 'test on docker'
       }
