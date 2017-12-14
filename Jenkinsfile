@@ -1,27 +1,14 @@
 pipeline {
-  agent {
-    docker {
-      image 'centos:7'
+    agent {
+        docker { image 'centos:7' }
     }
-    
-  }
-  stages {
-    stage('Setup') {
-      steps {
-        echo 'setup'
-        sh 'sudo yum update -y'
-      }
+    stages {
+        stage('Test') {
+            steps {
+                sh 'whami'
+                sh 'pwd'
+                sh 'sudo yum -h'
+            }
+        }
     }
-    stage('Test') {
-      agent any
-      steps {
-        echo 'test on docker'
-      }
-    }
-    stage('Deploy') {
-      steps {
-        echo 'deploy'
-      }
-    }
-  }
 }
