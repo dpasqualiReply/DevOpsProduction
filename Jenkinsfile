@@ -1,13 +1,11 @@
 pipeline {
     agent {
-        docker { image 'centos:7' }
+        docker { image 'node:7-alpine' }
     }
     stages {
         stage('Test') {
             steps {
-                sh 'whoami'
-                sh 'pwd'
-                sh 'sudo yum -h'
+                sh 'node --version'
             }
         }
     }
