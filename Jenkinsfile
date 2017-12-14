@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                sh 'whami'
+                sh 'whoami'
                 sh 'pwd'
                 sh 'sudo yum -h'
             }
