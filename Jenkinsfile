@@ -1,12 +1,13 @@
 pipeline {
-  agent {
-    docker {
-      image 'centos:7'
-    }
-    
-  }
+  agent none
   stages {
     stage('Test') {
+      agent {
+        docker {
+          image 'centos:7'
+        }
+        
+      }
       steps {
         echo 'test pipeline'
         sh '''sudo yum update -y
