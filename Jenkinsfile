@@ -5,7 +5,8 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                sh 'sbt version'
+                sh 'll'
+                sh 'pwd'
             }
         }
     }
