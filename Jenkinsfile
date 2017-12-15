@@ -7,6 +7,12 @@ pipeline {
   }
   stages {
     stage('Test') {
+      agent {
+        dockerfile {
+          filename 'devops_docker'
+        }
+        
+      }
       steps {
         echo 'ciaoooo'
       }
