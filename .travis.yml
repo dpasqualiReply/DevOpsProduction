@@ -1,0 +1,52 @@
+stages:
+ - setup
+ - test
+ - deploy
+
+before_script:
+ ## Environment Variables Loading
+ - echo "Load setup from src/test/conf"
+ - source src/test/conf
+
+setup_system:
+ stage: setup
+ before_script:
+  ## System Configuration
+  - echo "Configure the system"
+  - sudo yum update -y
+  - sudo yum install wget -y
+  ## Install Java
+  - sudo yum install java-1.8.0-openjdk -y
+  ## Install SBT
+  - sudo wget https://dl.bintray.com/sbt/rpm/sbt-1.0.0.rpm
+  - sudo yum localinstall sbt-1.0.0.rpm -y
+ script:
+  - java -version
+  - sbt about
+ variables:
+  GIT_STRATEGY: clone
+ tags:
+  - shell
+ 
+test:
+ stage: test
+ script:
+  - echo "Test starting..."
+  ##- sbt clean coverage test coverageReport
+ tags:
+ - shell
+ variables:
+  GIT_STRATEGY: none
+
+
+deploy:
+ stage: deploy
+ script:
+  - echo "Deploy starting..."
+  - echo "deploy to $DEPLOY_FOLDER"
+  ##- sudo cp oozie/* ${DEPLOY_FOLDER}/
+ tags:
+ - shell
+ when: manual
+ variables:
+  GIT_STRATEGY: none
