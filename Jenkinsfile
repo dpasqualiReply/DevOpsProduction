@@ -1,7 +1,7 @@
 pipeline {
   agent {
-    dockerfile {
-      filename 'devops_docker'
+    docker {
+      image 'centos:centos7.4.1708'
     }
     
   }
