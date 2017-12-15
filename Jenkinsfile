@@ -8,9 +8,7 @@ pipeline {
   stages {
     stage('Test') {
       steps {
-        sh 'ls -la'
-        sh 'pwd'
-        sh 'sbt sbtVersion'
+        echo 'ciaoooo'
       }
     }
   }
