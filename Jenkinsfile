@@ -1,15 +1,17 @@
 pipeline {
-    agent {
-        docker { image 'hseeberger/scala-sbt' }
+  agent {
+    dockerfile {
+      filename 'Dockerfile'
     }
-    stages {
-        stage('Test') {
-            steps {
-                sh 'cd testsbt'
-                sh 'ls -la'
-                sh 'pwd'
-                sh 'sbt sbtVersion'
-            }
-        }
+    
+  }
+  stages {
+    stage('Test') {
+      steps {
+        sh 'ls -la'
+        sh 'pwd'
+        sh 'sbt sbtVersion'
+      }
     }
+  }
 }
