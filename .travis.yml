@@ -6,7 +6,7 @@ stages:
 before_script:
  ## Environment Variables Loading
  - echo "Load setup from src/test/conf"
- - source src/test/conf
+ ##- source src/test/conf
 
 setup_system:
  stage: setup
