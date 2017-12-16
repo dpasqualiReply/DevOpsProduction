@@ -1,7 +1,7 @@
 pipeline {
   agent {
     dockerfile {
-      dir 'DockerBuilder/legacy'
+      dir 'DockerBuilder/legacy/'
     }
     
   }
