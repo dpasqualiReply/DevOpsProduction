@@ -1,6 +1,6 @@
 pipeline {
   agent {
-    dockerfile true    
+    dockerfile true
   }
   stages {
     stage('Test') {
@@ -9,7 +9,7 @@ pipeline {
         sh 'sbt about'
         sh 'java -version'
         sh 'ls -la'
-        sh 'sbt test'
+        sh 'sbt clean coverage test coverageReport'
       }
     }
   }
