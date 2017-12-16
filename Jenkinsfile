@@ -9,11 +9,6 @@ pipeline {
         sh 'sbt clean test coverage coverageReport'
       }
     }
-    stage('Save Test result') {
-      steps {
-        junit 'target/test-reports/*'
-      }
-    }
     stage('Build Fat Jar') {
       steps {
         sh 'sbt clean compile package'
@@ -24,5 +19,12 @@ pipeline {
         archiveArtifacts 'target/scala-2.11/*'
       }
     }
+  }
+  post {
+    always {
+      junit 'target/test-reports/*.xml'
+      
+    }
+    
   }
 }
