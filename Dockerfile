@@ -1,17 +1,16 @@
-FROM centos:7.1.1503
-
-MAINTAINER "Niklas Grossmann" <ngrossmann@gmx.net>
-
-RUN yum install -y java-1.8.0-openjdk-devel.x86_64 tar git bzip2 rpm-build
-
-RUN yum install -y http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
-
-RUN yum install -y npm
-
-RUN npm install -g grunt-cli
-
-RUN curl  -sLo /tmp/sbt.tar.gz 'https://dl.bintray.com/sbt/native-packages/sbt/0.13.8/sbt-0.13.8.tgz'
-
-RUN tar xzf /tmp/sbt.tar.gz -C /opt && rm /tmp/sbt.tar.gz
-
-RUN ln -s /opt/sbt/bin/sbt /usr/bin/
+FROM centos:centos7.4.1708
+USER root
+WORKDIR /opt/
+RUN ["yum", "update", "-y"]
+RUN ["yum", "install", "wget", "-y"]
+RUN ["yum", "install", "curl", "-y"]
+RUN ["yum", "install", "java-1.8.0-openjdk", "-y"]
+RUN ["wget", "http://dl.bintray.com/sbt/rpm/sbt-0.13.12.rpm"]
+RUN ["yum", "install", "sbt-0.13.12.rpm", "-y"]
+RUN ["yum", "install", "-y", "yum-utils", "device-mapper-persistent-data", "lvm2"]
+RUN ["yum-config-manager", "--add-repo", "https://download.docker.com/linux/centos/docker-ce.repo"]
+RUN ["yum", "install", "docker-ce-17.11.0.ce", "-y"]
+RUN ["systemctl start docker"]
+RUN ["systemctl enable docker"]
+WORKDIR /root
+CMD ["/bin/bash"]
