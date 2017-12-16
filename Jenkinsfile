@@ -6,14 +6,22 @@ pipeline {
     stage('Test Pipeline') {
       steps {
         echo 'Hello Dockerfile'
-        sh 'sbt test'
-        sh 'whoami'
+        sh 'sbt clean test coverage coverageReport'
       }
     }
-    stage('Test Spark Submit') {
+    stage('Save Test result') {
+      steps {
+        junit 'target/test-reports/*'
+      }
+    }
+    stage('Build Fat Jar') {
       steps {
         sh 'sbt clean compile package'
-        sh 'spark-submit --class HelloWorld --master local[*] target/scala-2.11/devopsproduction-pipelinetest_2.11-0.1.jar -s'
+      }
+    }
+    stage('Deploy') {
+      steps {
+        archiveArtifacts 'target/scala-2.11/*'
       }
     }
   }
