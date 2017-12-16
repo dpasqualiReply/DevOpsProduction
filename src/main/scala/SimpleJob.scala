@@ -11,12 +11,8 @@ object HelloWorld {
   def main(args: Array[String]): Unit = {
 
     println("\n\n\n\nHELLO WORLD")
-
-    if(args(0) == "-s")
-      showSeq().foreach(println)
-    else
-      squaredSeq().foreach(println)
-
+    showSeq().foreach(println)
+    squaredSeq().foreach(println)
     println("\n\n\n\nHELLO WORLD")
   }
 }
