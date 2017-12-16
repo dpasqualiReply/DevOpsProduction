@@ -1,10 +1,13 @@
 pipeline {
-  agent { dockerfile true }
+  agent {
+    dockerfile true
+  }
   stages {
     stage('Test') {
       steps {
         echo 'Hello Dockerfile'
-        sh 'sbt about'
+        sh '''sbt about
+java --version'''
       }
     }
   }
