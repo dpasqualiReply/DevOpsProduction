@@ -1,5 +1,4 @@
 
-import org.apache.spark.rdd.RDD
 import org.scalatest._
 
 import sys.process._
