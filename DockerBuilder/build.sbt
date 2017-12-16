@@ -6,6 +6,7 @@ scalaVersion := "2.11.11"
 
 libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.2" % "test"
 
+/*
 import com.typesafe.sbt.packager.docker._
 
 
@@ -63,3 +64,4 @@ dockerCommands := Seq(
   Cmd("WORKDIR", "/root"),
   ExecCmd("CMD", "/bin/bash")
 )
+*/
