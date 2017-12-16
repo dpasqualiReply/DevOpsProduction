@@ -7,8 +7,9 @@ pipeline {
       steps {
         echo 'Hello Dockerfile'
         sh '''sbt about
+java -version
 
-java --version'''
+           '''
       }
     }
   }
