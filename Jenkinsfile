@@ -1,6 +1,9 @@
 pipeline {
   agent {
-    dockerfile {dir 'DockerBuilder/legacy'}
+    dockerfile {
+      dir 'DockerBuilder/legacy'
+    }
+    
   }
   stages {
     stage('Test') {
@@ -10,8 +13,6 @@ pipeline {
 java -version
 ls -la
            '''
-        dir 'DockerBuilder'
-        sh 'ls -la'
       }
     }
   }
