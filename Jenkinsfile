@@ -6,8 +6,8 @@ pipeline {
     stage('Test') {
       steps {
         echo 'Hello Dockerfile'
-        sh 'ls -la'
-        sh 'sbt clean coverage test coverageReport'
+        sh '''ls -la
+java -version'''
       }
     }
   }
