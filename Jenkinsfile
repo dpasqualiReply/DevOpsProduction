@@ -32,7 +32,8 @@ pipeline {
     }
     stage('Test Submit') {
       steps {
-        sh '(pwd)/spark-2.2.0-bin-hadoop2.7/bin/spark-submit --class HelloWorld --master local[*] target/scala-2.11/devopsproduction-pipelinetest_2.11-0.1.jar'
+        sh 'echo $(pwd)'
+        sh 'spark-2.2.0-bin-hadoop2.7/bin/spark-submit --class HelloWorld --master local[*] target/scala-2.11/devopsproduction-pipelinetest_2.11-0.1.jar'
       }
     }
     stage('Deploy') {
