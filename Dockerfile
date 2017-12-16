@@ -9,7 +9,7 @@ RUN ["wget", "http://dl.bintray.com/sbt/rpm/sbt-0.13.12.rpm"]
 RUN ["yum", "localinstall", "sbt-0.13.12.rpm", "-y"]
 RUN ["yum", "install", "-y", "yum-utils", "device-mapper-persistent-data", "lvm2"]
 RUN ["yum-config-manager", "--add-repo", "https://download.docker.com/linux/centos/docker-ce.repo"]
-RUN ["yum", "install", "docker-ce-17.11.0.ce", "-y"]
+RUN ["yum", "install", "docker-ce", "-y"]
 RUN ["systemctl start docker"]
 RUN ["systemctl enable docker"]
 WORKDIR /root
