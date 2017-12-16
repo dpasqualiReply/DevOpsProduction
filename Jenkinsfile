@@ -11,7 +11,7 @@ pipeline {
         sh 'sudo yum localinstall sbt-0.13.12.rpm -y'
         sh 'sudo wget http://mirror.nohup.it/apache/spark/spark-2.2.0/spark-2.2.0-bin-hadoop2.7.tgz'
         sh 'export SPARK_HOME=$(pwd)/spark-2.2.0-bin-hadoop2.7'
-        sh 'export PATH=$PATH:$SPARK_HOME/bin'
+        sh 'export PATH=$PATH:$(pwd)/spark-2.2.0-bin-hadoop2.7/bin'
       }
     }
     stage('Test the System') {
