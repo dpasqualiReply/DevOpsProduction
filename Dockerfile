@@ -8,5 +8,6 @@ RUN ["yum", "install", "java-1.8.0-openjdk-1.8.0.151", "-y"]
 RUN ["yum", "install", "bc", "-y"]
 RUN ["wget", "http://dl.bintray.com/sbt/rpm/sbt-1.0.3.rpm"]
 RUN ["yum", "localinstall", "sbt-1.0.3.rpm", "-y"]
+RUN ["rm", "-rf", "/root/.sbt"]
 WORKDIR /root
 CMD ["/bin/bash"]
