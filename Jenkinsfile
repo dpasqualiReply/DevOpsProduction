@@ -1,6 +1,6 @@
 pipeline {
   agent {
-    dockerfile true
+    dockerfile {dir 'DockerBuilder/legacy'}
   }
   stages {
     stage('Test') {
@@ -8,8 +8,10 @@ pipeline {
         echo 'Hello Dockerfile'
         sh '''sbt about
 java -version
-
+ls -la
            '''
+        dir 'DockerBuilder'
+        sh 'ls -la'
       }
     }
   }
