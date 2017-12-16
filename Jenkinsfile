@@ -7,7 +7,7 @@ pipeline {
       steps {
         echo 'Hello Dockerfile'
         sh 'ls -la'
-        sh 'sbt'
+        sh 'sbt test'
       }
     }
   }

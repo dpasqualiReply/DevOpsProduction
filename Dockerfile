@@ -9,5 +9,6 @@ RUN ["yum", "install", "bc", "-y"]
 RUN ["wget", "https://dl.bintray.com/sbt/rpm/sbt-1.0.0.rpm"]
 RUN ["yum", "install", "sbt-1.0.0.rpm", "-y"]
 RUN ["rm", "-rf", "/root/.sbt"]
+RUN ["sbt" , "clean"]
 WORKDIR /root
 CMD ["/bin/bash"]
