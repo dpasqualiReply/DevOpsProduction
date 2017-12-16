@@ -7,6 +7,7 @@ pipeline {
       steps {
         echo 'Hello Dockerfile'
         sh 'sbt clean test coverage coverageReport'
+        junit 'target/test-reports/*.xml'
       }
     }
     stage('Build Fat Jar') {
@@ -19,12 +20,5 @@ pipeline {
         archiveArtifacts 'target/scala-2.11/*'
       }
     }
-  }
-  post {
-    always {
-      junit 'target/test-reports/*.xml'
-      
-    }
-    
   }
 }
