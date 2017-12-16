@@ -9,6 +9,7 @@ pipeline {
         sh 'sbt about'
         sh 'java -version'
         sh 'ls -la'
+        sh 'sbt test'
       }
     }
   }
