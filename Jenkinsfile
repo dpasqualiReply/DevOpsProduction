@@ -22,7 +22,24 @@ pipeline {
     }
     stage('Test scalatest') {
       steps {
-        sh 'sbt test'
+        sh 'sbt clean test coverage coverageReport'
+        archiveArtifacts 'target/test-reports/*.xml'
+      }
+    }
+    stage('Build') {
+      steps {
+        sh 'sbt clean compile package'
+        archiveArtifacts 'target/scala-2.11/devopsproduction-pipelinetest_2.11-0.1.jar'
+      }
+    }
+    stage('Test Submit') {
+      steps {
+        sh 'spark-submit --class HelloWorld --master local[*] target/scala-2.11/devopsproduction-pipelinetest_2.11-0.1.jar'
+      }
+    }
+    stage('Deploy') {
+      steps {
+        sh 'sudo cp target/scala-2.11/devopsproduction-pipelinetest_2.11-0.1.jar /opt/deploy/'
       }
     }
   }
