@@ -62,23 +62,23 @@ pipeline {
       }
     }
   }
-    post {
-        failure {
-            script {
-                if (!env.SKIP_BUILD) {
-                    sendMessage '#CC0000', 'failed :scream:'
-                }
-            }
+  post {
+    failure {
+      script {
+        if (!env.SKIP_BUILD) {
+          sendMessage '#CC0000', 'failed :scream:'
         }
-        unstable {
-            script {
-                sendMessage '#FFA500', 'unstable :grimacing:'
-            }
-        }
-        success {
-            script {
-                sendMessage '#00CC00', 'successful :smiley:'
-            }
-        }
+      }
     }
+    unstable {
+      script {
+        sendMessage '#FFA500', 'unstable :grimacing:'
+      }
+    }
+    success {
+      script {
+        sendMessage '#00CC00', 'successful :smiley:'
+      }
+    }
+  }
 }
