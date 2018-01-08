@@ -5,6 +5,8 @@ pipeline {
       steps {
         sh 'ls'
         script {
+          header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
+          echo "${header}"
           echo '<${env.BUILD_URL}>input/Async-input/proceedEmpty'
           input id: 'Async-input', message: 'Waiting for remote system'
         }
