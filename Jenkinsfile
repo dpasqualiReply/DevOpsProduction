@@ -1,31 +1,3 @@
-def sendMessage = {color, specificMessage->
-    // Print a message to the console and to Slack.
-    header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
-    header += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
-    message = "${header}\n${specificMessage}"
-    if (lastCommit.equals(ancestorCommit)) {
-        // Get last commit if we do not have a distinct ancestor.
-        commitHashes = [sh(script: "git log -1 --pretty=%H", returnStdout: true).trim()]
-    } else {
-        // Get max 5 commits since ancestor.
-        commitHashes = sh(script: "git rev-list -5 ${ancestorCommit}..", returnStdout: true).trim().tokenize('\n')
-    }
-    for (commit in commitHashes) {
-        author = sh(script: "git log -1 --pretty=%an ${commit}", returnStdout: true).trim()
-        commitMsg = sh(script: "git log -1 --pretty=%B ${commit}", returnStdout: true).trim()
-        message += " Commit by <@${author}> (${author}): ``` ${commitMsg} ``` "
-    }
-    echo "Message ${message}"
-
-    /* (optional snippet)
-    // Send a Slack message. (Note that you need to configure a Slack access token in the Jenkins system settings).
-    slackSend channel: 'yourchannelid', teamDomain: 'yourdomain', color: color, message: message, failOnError: true
-    */
-  slackSend(message: message, baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: color, token: 'ihoCVUPB7hqGz2xI1htD8x0F')
-      
-}
-
-
 pipeline {
   agent any
   stages {
@@ -66,18 +38,18 @@ pipeline {
     failure {
       script {
         if (!env.SKIP_BUILD) {
-          sendMessage '#CC0000', 'failed :scream:'
+            slackSend(message: 'failed :scream:', baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: '#CC0000', token: 'ihoCVUPB7hqGz2xI1htD8x0F')
         }
       }
     }
     unstable {
       script {
-        sendMessage '#FFA500', 'unstable :grimacing:'
+          slackSend(message: 'unstable :grimacing:', baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: '#FFA500', token: 'ihoCVUPB7hqGz2xI1htD8x0F')
       }
     }
     success {
       script {
-        sendMessage '#00CC00', 'successful :smiley:'
+          slackSend(message: 'successful :smiley:', baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: '#00CC00', token: 'ihoCVUPB7hqGz2xI1htD8x0F')
       }
     }
   }
