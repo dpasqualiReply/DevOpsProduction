@@ -7,6 +7,8 @@ pipeline {
         script {
           link= "${env.BUILD_URL}input/Async-input/proceedEmpty"
           echo "${link}"
+          messaggio = '{"text":"Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)> build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:\nUnit Test passed :confetti_ball:","attachments":[{"text":"Do you want to run Integration Tests","fallback":"You are unable to choose a game","callback_id":"next_level","color":"#00CC00","attachment_type":"default","actions":[{"name":"Choice","text":"Run Integration","type":"button","value":"run"},{"name":"Choice","text":"Abort","type":"button","value":"abort"}]}]}'
+          echo "${messaggio}"
           input id: 'Async-input', message: 'Waiting for remote system'
         }
         
