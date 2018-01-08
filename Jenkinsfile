@@ -5,9 +5,8 @@ pipeline {
       steps {
         sh 'ls'
         script {
-          callback_url = registerWebhook()
-          echo "${callback_url}"
-          waitForWebhook callback_url
+          echo '{\"callback\":\"${env.BUILD_URL}input/Async-input/proceedEmpty\"}'
+          input id: 'Async-input', message: 'Waiting for remote system'
         }
         
         echo 'Soooooooooo lets deploy this shit'
