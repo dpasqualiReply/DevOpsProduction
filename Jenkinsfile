@@ -5,7 +5,7 @@ pipeline {
       steps {
         sh 'ls'
         script {
-          echo '{\"callback\":\"${env.BUILD_URL}input/Async-input/proceedEmpty\"}'
+          echo '${env.BUILD_URL}input/Async-input/proceedEmpty\"}'
           input id: 'Async-input', message: 'Waiting for remote system'
         }
         
