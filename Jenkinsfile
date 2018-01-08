@@ -6,9 +6,11 @@ pipeline {
         sh 'ls'
         script {
           link= "${env.BUILD_URL}input/Async-input/proceedEmpty"
+          abort= "${env.BUILD_URL}input/Async-input/abort"
           echo "${link}"
-          messaggio = '{"text":"Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)> build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:\nUnit Test passed :confetti_ball:","attachments":[{"text":"Do you want to run Integration Tests","fallback":"You are unable to choose a game","callback_id":"next_level","color":"#00CC00","attachment_type":"default","actions":[{"name":"Choice","text":"Run Integration","type":"button","value":"run"},{"name":"Choice","text":"Abort","type":"button","value":"abort"}]}]}'
+          messaggio = '{"text":"Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)> build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:\nUnit Test passed :confetti_ball:","attachments":[{"text":"Do you want to run Integration Tests","fallback":"You are unable to choose a game","callback_id":"next_level","color":"#00CC00","attachment_type":"default","actions":[{"type":"button","name":"staging","text":"Deploy to Staging","url":"${link}","style":"primary"},{"type":"button","name":"abort","text":"Abort","url":"${abort}","style":"danger"}]}]}'
           echo "${messaggio}"
+          slackSend(message: messaggio, baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', token: 'ihoCVUPB7hqGz2xI1htD8x0F')
           input id: 'Async-input', message: 'Waiting for remote system'
         }
         
