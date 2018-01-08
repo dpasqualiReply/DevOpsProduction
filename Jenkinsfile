@@ -4,7 +4,12 @@ pipeline {
     stage('No-op') {
       steps {
         sh 'ls'
-        input(message: 'Ready to deploy in production??', ok: 'GO')
+        script {
+          callback_url = registerWebhook()
+          echo "${callback_url}"
+          waitForWebhook callback_url
+        }
+        
         echo 'Soooooooooo lets deploy this shit'
       }
     }
