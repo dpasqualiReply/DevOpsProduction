@@ -51,7 +51,7 @@ pipeline {
       script {
         color = '#FFDD12'
         mess = "nuooooo disastroooo :("
-        sendMessage(mess, color)
+        sendMessage mess, color
       }
       
       
