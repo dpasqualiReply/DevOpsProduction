@@ -25,7 +25,7 @@ pipeline {
         def message2 = "cazzooooooo"
       }
       
-      echo message2
+      echo "Message ${message2}"
       slackSend(message: message2, baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: color, token: 'ihoCVUPB7hqGz2xI1htD8x0F')
       
     }
