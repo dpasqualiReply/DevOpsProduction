@@ -3,7 +3,9 @@ pipeline {
   stages {
     stage('No-op') {
       steps {
-        sh 'll'
+        sh 'ls'
+        input(message: 'Ready to deploy in production??', ok: 'GO')
+        echo 'Soooooooooo lets deploy this shit'
       }
     }
   }
