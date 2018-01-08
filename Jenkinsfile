@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('No-op') {
       steps {
-        sh 'ls'
+        sh 'll'
       }
     }
   }
@@ -15,28 +15,52 @@ pipeline {
     
     success {
       script {
-        HEAD = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
-        HEAD += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
-        MESS = "${HEAD}\nsuccessful :smiley:"
+        header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
+        header += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
+        message = "${message}\nsuccessful :smiley:"
         
-        AUTH = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
-        COMM_MESS = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
-        MESS += " Commit by <@${AUTH}> (${AUTH}): ``` ${COMM_MESS} ``` "
+        author = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
+        commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+        message += " Commit by <@${author}> (${author}): ``` ${commitMessage} ``` "
         color = '#00CC00'
       }
       
-      echo "Message ${MESS}"
-      slackSend(message: MESS, baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: color, token: 'ihoCVUPB7hqGz2xI1htD8x0F')
+      echo "Message ${message}"
+      slackSend(message: message, baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: color, token: 'ihoCVUPB7hqGz2xI1htD8x0F')
       
     }
     
     unstable {
-      echo 'I am unstable :/'
+      script {
+        header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
+        header += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
+        message = "${message}\nsuccessful :smiley:"
+        
+        author = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
+        commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+        message += " Commit by <@${author}> (${author}): ``` ${commitMessage} ``` "
+        color = '#00CC00'
+      }
+      
+      echo "Message ${message}"
+      slackSend(message: message, baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: color, token: 'ihoCVUPB7hqGz2xI1htD8x0F')
       
     }
     
     failure {
-      echo 'I failed :('
+      script {
+        header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
+        header += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
+        message = "${message}\nsFAILED :(:"
+        
+        author = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
+        commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+        message += " Commit by <@${author}> (${author}): ``` ${commitMessage} ``` "
+        color = '#FFDD12'
+      }
+      
+      echo "Message ${message}"
+      slackSend(message: message, baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: color, token: 'ihoCVUPB7hqGz2xI1htD8x0F')
       
     }
     
