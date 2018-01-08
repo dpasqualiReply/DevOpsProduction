@@ -15,15 +15,14 @@ pipeline {
     }
     
     success {
-      echo "Message ${message}"
       script {
-        header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
-        header += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
-        message = "${header}\nsuccessful :smiley:"
+        HEAD = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
+        HEAD += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
+        MESS = "${HEAD}\nsuccessful :smiley:"
         
-        author = sh(script: "git log -1 --pretty=%an ${commit}", returnStdout: true).trim()
-        commitMsg = sh(script: "git log -1 --pretty=%B ${commit}", returnStdout: true).trim()
-        message += " Commit by <@${author}> (${author}): ``` ${commitMsg} ``` "
+        AUTH = sh(script: "git log -1 --pretty=%an ${commit}", returnStdout: true).trim()
+        COMM_MESS = sh(script: "git log -1 --pretty=%B ${commit}", returnStdout: true).trim()
+        MESS += " Commit by <@${AUTH}> (${AUTH}): ``` ${COMM_MESS} ``` "
         color = '#00CC00'
       }
       
