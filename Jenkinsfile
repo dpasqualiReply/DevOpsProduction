@@ -31,6 +31,7 @@ pipeline {
                 sh 'sudo yum localinstall sbt-0.13.12.rpm -y'
             }
         }
+        /*
         stage('Test scalatest') {
             steps {
                 sh 'sbt clean test coverage coverageReport'
@@ -48,6 +49,7 @@ pipeline {
                 sh 'sudo cp target/scala-2.11/devopsproduction-pipelinetest_2.11-0.1.jar /opt/deploy/'
             }
         }
+        */
         stage('Notify') {
             steps {
                 slackSend(message: 'Build Donw', baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: 'blue', token: 'ihoCVUPB7hqGz2xI1htD8x0F')
