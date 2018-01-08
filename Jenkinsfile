@@ -23,6 +23,7 @@ pipeline {
       echo "Message ${message}"
       script {
         MESS = "cazzooooooo"
+        MESS += "AAAAAAA"
       }
       
       echo "Message ${MESS}"
