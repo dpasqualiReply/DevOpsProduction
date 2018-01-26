@@ -27,7 +27,7 @@ pipeline {
         
         author = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
         commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
-        message += " Commit by <@${author}> (${author}): ``` ${commitMessage} ``` "
+        message += " Commit by @${author}: ``` ${commitMessage} ``` "
         color = '#00CC00'
       }
       
@@ -44,7 +44,7 @@ pipeline {
         
         author = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
         commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
-        message += " Commit by <@${author}> (${author}): ``` ${commitMessage} ``` "
+        message += " Commit by @${author}: ``` ${commitMessage} ``` "
         color = '#00CC00'
       }
       
@@ -61,7 +61,7 @@ pipeline {
         
         author = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
         commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
-        message += " Commit by <@${author}> (${author}): ``` ${commitMessage} ``` "
+        message += " Commit by @${author}: ``` ${commitMessage} ``` "
         color = '#FFDD12'
       }
       
