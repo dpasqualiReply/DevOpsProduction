@@ -6,16 +6,6 @@ pipeline {
         echo 'Soooooooooo lets deploy this shit'
       }
     }
-    stage('Simple Tests') {
-      steps {
-        sh 'sbt clean test'
-      }
-    }
-    stage('Fake Build') {
-      steps {
-        sh 'sbt clean compile package'
-      }
-    }
     stage('Production Deploy') {
       steps {
         echo 'Safe to Deploy in Production, Great Job :D'
@@ -24,11 +14,6 @@ pipeline {
     }
   }
   post {
-    always {
-      echo 'One way or another, I have finished'
-      
-    }
-    
     success {
       script {
         header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
@@ -41,7 +26,7 @@ pipeline {
         color = '#00CC00'
       }
       
-      notifySlack('', slackNotificationChannel, [
+      notifySlack('', "general", [
                               [
                                           title: "<${env.JOB_URL}|${env.BRANCH_NAME}>, build #${env.BUILD_NUMBER}",
                                           title_link: "${env.BUILD_URL}",
