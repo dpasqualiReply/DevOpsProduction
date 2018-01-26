@@ -14,7 +14,7 @@ pipeline {
           message += " Commit by <@${author}> (${author}): ``` ${commitMessage} ``` "
           message += "---"
           message += "\nThe new Batch ETL commit pass Unit and Integration tests"
-          message += "\nPlease <${env.JOB_DISPLAY_URL}|Manual Deploy> it if you want!"
+          message += "\nPlease <${env.RUN_DISPLAY_URL}|Manual Deploy> it if you want!"
           //message += "\n<${link}|Deploy to Stageing env> or <${abort}|Abort>"
           color = '#FFDD12'
 
