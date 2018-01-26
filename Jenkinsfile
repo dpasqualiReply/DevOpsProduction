@@ -1,49 +1,6 @@
 import groovy.json.JsonOutput
-import java.util.Optional
-import hudson.tasks.test.AbstractTestResultAction
-import hudson.model.Actionable
-import hudson.tasks.junit.CaseResult
 
 def slackNotificationChannel = 'general'
-
-@NonCPS
-def getTestSummary = { ->
-  def testResultAction = currentBuild.rawBuild.getAction(AbstractTestResultAction.class)
-  def summary = ""
-
-  if (testResultAction != null) {
-    total = testResultAction.getTotalCount()
-    failed = testResultAction.getFailCount()
-    skipped = testResultAction.getSkipCount()
-
-    summary = "Passed: " + (total - failed - skipped)
-    summary = summary + (", Failed: " + failed)
-    summary = summary + (", Skipped: " + skipped)
-  } else {
-    summary = "No tests found"
-  }
-  return summary
-}
-
-//@NonCPS
-//def getFailedTests = { ->
-//  def testResultAction = currentBuild.rawBuild.getAction(AbstractTestResultAction.class)
-//  def failedTestsString = "```"
-//
-//  if (testResultAction != null) {
-//    def failedTests = testResultAction.getFailedTests()
-//
-//    if (failedTests.size() > 9) {
-//      failedTests = failedTests.subList(0, 8)
-//    }
-//
-//    for(CaseResult cr : failedTests) {
-//      failedTestsString = failedTestsString + "${cr.getFullDisplayName()}:\n${cr.getErrorDetails()}\n\n"
-//    }
-//    failedTestsString = failedTestsString + "```"
-//  }
-//  return failedTestsString
-//}
 
 def notifySlack(text, channel, attachments) {
   def slackURL = 'https://hooks.slack.com/services/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'
@@ -118,11 +75,6 @@ pipeline {
                               [
                                       title: "Branch",
                                       value: "${env.GIT_BRANCH}",
-                                      short: true
-                              ],
-                              [
-                                      title: "Test Results",
-                                      value: "${getTestSummary()}",
                                       short: true
                               ],
                               [
