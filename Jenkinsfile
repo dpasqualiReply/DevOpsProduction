@@ -1,6 +1,46 @@
 import groovy.json.JsonOutput
+import hudson.tasks.test.AbstractTestResultAction
 
 def slackNotificationChannel = 'general'
+
+@NonCPS
+def getTestSummary = { ->
+  def testResultAction = currentBuild.rawBuild.getAction(AbstractTestResultAction.class)
+  def summary = ""
+
+  if (testResultAction != null) {
+    total = testResultAction.getTotalCount()
+    failed = testResultAction.getFailCount()
+    skipped = testResultAction.getSkipCount()
+
+    summary = "Passed: " + (total - failed - skipped)
+    summary = summary + (", Failed: " + failed)
+    summary = summary + (", Skipped: " + skipped)
+  } else {
+    summary = "No tests found"
+  }
+  return summary
+}
+
+//@NonCPS
+//def getFailedTests = { ->
+//  def testResultAction = currentBuild.rawBuild.getAction(AbstractTestResultAction.class)
+//  def failedTestsString = "```"
+//
+//  if (testResultAction != null) {
+//    def failedTests = testResultAction.getFailedTests()
+//
+//    if (failedTests.size() > 9) {
+//      failedTests = failedTests.subList(0, 8)
+//    }
+//
+//    for(CaseResult cr : failedTests) {
+//      failedTestsString = failedTestsString + "${cr.getFullDisplayName()}:\n${cr.getErrorDetails()}\n\n"
+//    }
+//    failedTestsString = failedTestsString + "```"
+//  }
+//  return failedTestsString
+//}
 
 def notifySlack(text, channel, attachments) {
   def slackURL = 'https://hooks.slack.com/services/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'
@@ -78,6 +118,11 @@ pipeline {
                                       short: true
                               ],
                               [
+                                      title: "Test Results",
+                                      value: "${getTestSummary()}",
+                                      short: true
+                              ],
+                              [
                                       title: "Last Commit",
                                       value: "${commitMessage}",
                                       short: false
@@ -88,7 +133,7 @@ pipeline {
 
     }
 
-    unstable {
+//    unstable {
 //      script {
 //        header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
 //        header += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
@@ -103,9 +148,9 @@ pipeline {
 //      echo "Message ${message}"
 //      slackSend(message: message, baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: color, token: 'ihoCVUPB7hqGz2xI1htD8x0F')
 
-    }
+//    }
 
-    failure {
+//    failure {
 //      script {
 //        header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
 //        header += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
@@ -120,7 +165,7 @@ pipeline {
 //      echo "Message ${message}"
 //      slackSend(message: message, baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: color, token: 'ihoCVUPB7hqGz2xI1htD8x0F')
 
-    }
+//    }
 
   }
 }
