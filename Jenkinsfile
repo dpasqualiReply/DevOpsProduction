@@ -62,18 +62,18 @@ pipeline {
     stage('No-op') {
       steps {
         echo 'Soooooooooo lets deploy this shit'
-        notifySlack("Success!", slackNotificationChannel, [])
+        //notifySlack("Success!", slackNotificationChannel, [])
       }
     }
     stage('Simple Tests') {
       steps {
-        echo 'sbt clean test'
+        sh 'sbt clean test'
       }
     }
     stage('Fake Build') {
       steps {
-        echo 'sbt clean compile package'
-        step $class: 'JUnitResultArchiver', testResults: '**/TEST-*.xml'
+        sh 'sbt clean compile package'
+        step $class: 'JUnitResultArchiver', testResults: 'target/test-reports/*.xml'
       }
     }
     stage('Production Deploy') {
