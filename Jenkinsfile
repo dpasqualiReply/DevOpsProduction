@@ -3,24 +3,24 @@ pipeline {
   stages {
     stage('No-op') {
       steps {
-//        sh 'ls'
-//        script {
-//          link= "${env.BUILD_URL}input/Async-input/proceedEmpty"
-//          abort= "${env.BUILD_URL}input/Async-input/abort"
-//          header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
-//          header += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
-//          message = "${header}\n"
-//          author = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
-//          commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
-//          message += " Commit by <@${author}> (${author}): ``` ${commitMessage} ``` "
-//          message += "---"
-//          message += "\nThe Commit passed Unit Test, Run Integration Tests??"
-//          message += "\n<${link}|Deploy to Stageing env> or <${abort}|Abort>"
-//          color = '#FFDD12'
-//
-//          slackSend(message: message, baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: color, token: 'ihoCVUPB7hqGz2xI1htD8x0F')
-//          input id: 'Async-input', message: 'Waiting for remote system'
-//        }
+        script {
+          link= "${env.BUILD_URL}input/Async-input/proceedEmpty"
+          abort= "${env.BUILD_URL}input/Async-input/abort"
+          header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
+          header += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
+          message = "${header}\n"
+          author = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
+          commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+          message += " Commit by <@${author}> (${author}): ``` ${commitMessage} ``` "
+          message += "---"
+          message += "\nThe new Batch ETL commit pass Unit and Integration tests"
+          message += "\nPlease <${env.JOB_DISPLAY_URL}|Manual Deploy> it if you want!"
+          //message += "\n<${link}|Deploy to Stageing env> or <${abort}|Abort>"
+          color = '#FFDD12'
+
+          slackSend(message: message, baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: color, token: 'ihoCVUPB7hqGz2xI1htD8x0F')
+          input id: 'Async-input', message: 'Waiting for remote system'
+        }
 
         echo 'Soooooooooo lets deploy this shit'
       }
@@ -42,7 +42,7 @@ pipeline {
       script {
         header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
         header += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
-        message = "${header}\nsuccessful :smiley:"
+        message = "${header}\n :smiley: New Batch ETL release deployed in Production"
 
         author = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
         commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
@@ -59,12 +59,12 @@ pipeline {
       script {
         header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
         header += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
-        message = "${header}\nsuccessful :smiley:"
+        message = "${header}\n:glitch_crab: Oh No!!! there is something wrong"
 
         author = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
         commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
         message += " Commit by <@${author}> (${author}): ``` ${commitMessage} ``` "
-        color = '#00CC00'
+        color = '#ffff00'
       }
 
       echo "Message ${message}"
@@ -76,7 +76,7 @@ pipeline {
       script {
         header = "Job <${env.JOB_URL}|${env.BRANCH_NAME}> <${env.JOB_DISPLAY_URL}|(Blue)>"
         header += " build <${env.BUILD_URL}|${env.BUILD_DISPLAY_NAME}> <${env.RUN_DISPLAY_URL}|(Blue)>:"
-        message = "${header}\nsFAILED :(:"
+        message = "${header}\nsFAILED The Build Failed, Release not ready for production!:"
 
         author = sh(script: "git log -1 --pretty=%an", returnStdout: true).trim()
         commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
