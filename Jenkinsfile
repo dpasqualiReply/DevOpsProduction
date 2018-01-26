@@ -30,7 +30,7 @@ pipeline {
                         id: 'DeployBETL', message: 'Deploy in Production??')
               }
             } catch(err) { // timeout reached or input false
-              slackSend(message: "Deploy for Batch ETL expired of aborted", baseUrl: 'https://devops-pasquali-cm.slack.com/services/hooks/jenkins-ci/', color: color, token: 'ihoCVUPB7hqGz2xI1htD8x0F')
+                error("Deploy session expired or aborted")
             }
           }
         }
