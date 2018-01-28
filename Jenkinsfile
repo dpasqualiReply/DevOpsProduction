@@ -5,7 +5,7 @@ pipeline {
       steps {
         sh 'sbt clean test'
         junit(testResults: 'target/test-reports/DockerfileSpec.xml', allowEmptyResults: true)
-        echo 'Soooooooooo lets deploy this shit'
+        echo 'dd lets deploy this shit'
       }
     }
   }
